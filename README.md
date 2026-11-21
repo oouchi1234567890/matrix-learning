@@ -52,6 +52,7 @@
 | <img src="docs/icons/palette.svg" width="22" alt="Palette"> | 配色変更 | 用語・意味・枠・背景・カード内部を個別設定 |
 | <img src="docs/icons/maximize.svg" width="22" alt="Maximize"> | 全画面表示 | 学習画面をクリックして全画面へ切り替え |
 | <img src="docs/icons/computer.svg" width="22" alt="Computer"> | スマホ対応 | 320px幅から操作パネルとカードを画面内へ自動配置 |
+| <img src="docs/icons/pause.svg" width="22" alt="Pause"> | 自動非表示 | 5秒間操作がなければ一時停止以外の操作UIを非表示 |
 
 ## <img src="docs/icons/computer.svg" width="24" alt="Computer"> クイックスタート
 

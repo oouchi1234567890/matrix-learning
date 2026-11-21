@@ -17,9 +17,10 @@ IT & AI Learning is a browser-based app for reviewing concepts from Japan's Appl
 5. [Pausing and resuming](#pausing-and-resuming)
 6. [Using full-screen mode](#using-full-screen-mode)
 7. [Using the app on a smartphone](#using-the-app-on-a-smartphone)
-8. [How study items are displayed](#how-study-items-are-displayed)
-9. [Publishing with GitHub Pages](#publishing-with-github-pages)
-10. [Troubleshooting](#troubleshooting)
+8. [Automatic control hiding](#automatic-control-hiding)
+9. [How study items are displayed](#how-study-items-are-displayed)
+10. [Publishing with GitHub Pages](#publishing-with-github-pages)
+11. [Troubleshooting](#troubleshooting)
 
 ## Starting the app
 
@@ -90,6 +91,10 @@ If full-screen mode does not start, allow full-screen access in your browser.
 ## Using the app on a smartphone
 
 At widths of 600px or less, the color and speed panels become compact, while Pause and the language switch move to the bottom of the screen. Cards are drawn below the top controls and automatically sized so neither edge is clipped. Portrait layouts are supported from 320px wide.
+
+## Automatic control hiding
+
+After five seconds without mouse, touch, or keyboard input, the color panel, speed panel, and language switch fade out. Pause remains visible at all times. Touch the screen, move the pointer, or press a key to show the controls again. The first tap while controls are hidden only restores them and does not toggle full-screen mode.
 
 ## How study items are displayed
 

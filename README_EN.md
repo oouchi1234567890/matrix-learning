@@ -52,6 +52,7 @@ Open the [English app](index_en.html) to study with an English interface and Eng
 | <img src="docs/icons/palette.svg" width="22" alt="Palette"> | Color settings | Customize terms, definitions, borders, page background, and card fill |
 | <img src="docs/icons/maximize.svg" width="22" alt="Maximize"> | Full screen | Click the study area to enter or leave full-screen mode |
 | <img src="docs/icons/computer.svg" width="22" alt="Computer"> | Mobile layout | Keeps controls and cards within the screen from 320px wide |
+| <img src="docs/icons/pause.svg" width="22" alt="Pause"> | Auto-hide controls | Hides every control except Pause after five seconds of inactivity |
 
 ## <img src="docs/icons/computer.svg" width="24" alt="Computer"> Quick start
 

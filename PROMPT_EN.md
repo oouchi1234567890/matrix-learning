@@ -73,6 +73,9 @@ Format every item as “Term: concise and accurate definition.” Cover the same
 - Interacting with color pickers, the speed slider, Pause, or the language switch must not toggle full screen.
 - Reposition controls such as the language switch on narrow screens so controls do not overlap.
 - Use appropriate accessibility attributes, including aria-live, aria-pressed, label associations, and aria-hidden.
+- After five seconds without mouse, touch, or keyboard input, fade out the color panel, speed panel, and language switch. Keep Pause visible at all times.
+- Restore hidden controls and reset the timer on pointermove, pointerdown, or keydown.
+- When controls are hidden, use the first tap only to restore them; that tap must not toggle full-screen mode.
 
 [Smartphone support]
 - Include the viewport meta tag and prevent horizontal scrolling.

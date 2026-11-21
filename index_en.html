@@ -185,6 +185,20 @@
         color: #e8ffe8;
         border-color: #39e75f;
       }
+      .color-panel,
+      .speed-panel,
+      .language-link {
+        transition:
+          opacity 0.35s ease,
+          visibility 0.35s ease;
+      }
+      body.controls-hidden .color-panel,
+      body.controls-hidden .speed-panel,
+      body.controls-hidden .language-link {
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+      }
       @media (max-width: 900px) {
         .language-link {
           top: 64px;
@@ -539,8 +553,43 @@
         updateTiming();
       });
 
+      const controlsHideDelay = 5000;
+      let controlsHideTimer;
+      let suppressNextBackgroundClick = false;
+
+      function scheduleControlsHide() {
+        clearTimeout(controlsHideTimer);
+        controlsHideTimer = setTimeout(() => {
+          document.body.classList.add("controls-hidden");
+        }, controlsHideDelay);
+      }
+
+      function showControls() {
+        document.body.classList.remove("controls-hidden");
+        scheduleControlsHide();
+      }
+
+      document.addEventListener(
+        "pointerdown",
+        (event) => {
+          const wasHidden = document.body.classList.contains("controls-hidden");
+          if (wasHidden && !event.target.closest("#pauseButton")) {
+            suppressNextBackgroundClick = true;
+          }
+          showControls();
+        },
+        { capture: true },
+      );
+      document.addEventListener("pointermove", showControls, { passive: true });
+      document.addEventListener("keydown", showControls);
+      scheduleControlsHide();
+
       document.addEventListener("click", (event) => {
         if (event.target.closest("#colorPanel, #pauseButton, #speedPanel, #languageLink")) return;
+        if (suppressNextBackgroundClick) {
+          suppressNextBackgroundClick = false;
+          return;
+        }
         if (!document.fullscreenElement)
           document.documentElement.requestFullscreen?.();
         else document.exitFullscreen?.();
