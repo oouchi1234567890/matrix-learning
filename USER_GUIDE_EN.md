@@ -6,7 +6,7 @@ IT & AI Learning is a browser-based app for reviewing concepts from Japan's Appl
 
 ![IT & AI Learning main screen](docs/images/matrix-learning-overview-en.png)
 
-> **Items do not repeat within a cycle.** The app displays each of the 2,000 study items once before starting the next cycle. At `1.0×`, one complete cycle takes approximately 22 minutes.
+> **Items do not repeat within a cycle.** The app displays each of the 2,000 study items once before starting the next cycle. Cycle and remaining time are calculated from viewport size, lane count, card spacing, and speed.
 
 ## Contents
 
@@ -67,7 +67,9 @@ Click a color swatch and choose a color. Select **Restore Defaults** to return t
 - Maximum: `3.0×`
 - Step: `0.25×`
 
-The selected multiplier appears above the slider and takes effect immediately. The panel also estimates the time needed to show all 2,000 items at the selected speed. For example, it shows approximately 22 minutes at `1.0×` and approximately 11 minutes at `2.0×`.
+The selected multiplier appears above the slider and takes effect immediately. The panel displays both the estimated duration of a complete 2,000-item cycle and the remaining time from the current position. The calculation uses the number of lanes that fit the screen, vertical card spacing, per-lane movement speed, selected multiplier, and issued item count.
+
+Time therefore varies by device even at `1.0×`. As a guide, a `1600×900` viewport takes about 33 minutes per cycle, while a one-lane `390×844` smartphone takes about 2 hours 21 minutes. The estimate is recalculated after a speed change, rotation, or resize.
 
 Below the slider, a progress bar shows the current cycle number, issued item count, and percentage of all 2,000 items—for example, `Cycle 1: 840 / 2,000 (42.0%)`. After all items have appeared, the next cycle starts from the beginning with a newly shuffled order.
 
@@ -102,7 +104,7 @@ At widths of 600px or less, the color and speed panels become compact, while Pau
 | Law, ethics & management | 150 |
 | **Total** | **2,000** |
 
-After all 2,000 items have appeared, the app reshuffles the deck and begins a new cycle. At `1.0×`, a complete cycle takes approximately 22 minutes.
+After all 2,000 items have appeared, the app reshuffles the deck and begins a new cycle. Cycle and remaining time update for the current viewport and speed.
 
 ## Publishing with GitHub Pages
 

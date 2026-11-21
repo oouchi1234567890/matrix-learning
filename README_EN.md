@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <strong>2,000 items</strong> · <strong>No repeats per cycle</strong> · <strong>About 22 minutes per cycle at 1.0×</strong>
+  <strong>2,000 items</strong> · <strong>No repeats per cycle</strong> · <strong>Device-aware cycle and remaining time</strong>
 </p>
 
 <p align="center">

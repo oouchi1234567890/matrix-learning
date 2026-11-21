@@ -272,7 +272,10 @@
     <button class="pause-button" id="pauseButton" type="button"><svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg><span id="pauseLabel">一時停止</span></button>
     <div class="speed-panel" id="speedPanel">
       <label for="speedControl"><span><svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>スピード</span><span id="speedValue">1.0倍</span></label>
-      <div class="cycle-time" id="cycleTime">1周：約22分</div>
+      <div class="cycle-time">
+        <div id="cycleTime">1周：計算中</div>
+        <div id="remainingTime">残り：計算中</div>
+      </div>
       <input id="speedControl" type="range" min="0.25" max="3" step="0.25" value="1" />
       <div class="cycle-progress" aria-live="polite">
         <div class="progress-label" id="progressLabel">進捗 0 / 2,000（0.0%）</div>
@@ -382,6 +385,7 @@
       const laneWidth = 340;
       const cardHeight = 96;
       const cardsPerLane = 4;
+      const frameIntervalMs = 30;
       let lanes = [];
       let isPaused = false;
       let speedMultiplier = 1;
@@ -390,12 +394,51 @@
       let cycleNumber = 0;
       let cycleIssued = 0;
 
+      function formatDuration(totalSeconds) {
+        const roundedSeconds = Math.max(0, Math.round(totalSeconds));
+        const hours = Math.floor(roundedSeconds / 3600);
+        const minutes = Math.floor((roundedSeconds % 3600) / 60);
+        const seconds = roundedSeconds % 60;
+        if (hours > 0) {
+          return minutes > 0 ? `約${hours}時間${minutes}分` : `約${hours}時間`;
+        }
+        if (minutes > 0) {
+          return seconds > 0 ? `約${minutes}分${seconds}秒` : `約${minutes}分`;
+        }
+        return `約${seconds}秒`;
+      }
+
+      function getItemsPerSecond() {
+        const laneCount = Math.max(1, Math.floor(canvas.width / laneWidth));
+        const spacing = Math.max(cardHeight + 28, canvas.height / cardsPerLane);
+        let totalLaneSpeed = 0;
+        for (let index = 0; index < laneCount; index++) {
+          totalLaneSpeed += 1.5 + (index % 3) * 0.24;
+        }
+        return (
+          (totalLaneSpeed * speedMultiplier) /
+          (spacing * (frameIntervalMs / 1000))
+        );
+      }
+
+      function updateTiming() {
+        const itemsPerSecond = getItemsPerSecond();
+        const cycleSeconds = allTerms.length / itemsPerSecond;
+        const remainingItems = Math.max(0, allTerms.length - cycleIssued);
+        const remainingSeconds = remainingItems / itemsPerSecond;
+        document.getElementById("cycleTime").textContent =
+          `1周：${formatDuration(cycleSeconds)}`;
+        document.getElementById("remainingTime").textContent =
+          `残り：${formatDuration(remainingSeconds)}`;
+      }
+
       function updateProgress() {
         const ratio = cycleIssued / allTerms.length;
         const percent = (ratio * 100).toFixed(1);
         document.getElementById("progressLabel").textContent =
           `${cycleNumber}周目：${cycleIssued.toLocaleString("ja-JP")} / ${allTerms.length.toLocaleString("ja-JP")}（${percent}%）`;
         document.getElementById("progressBar").style.width = `${ratio * 100}%`;
+        updateTiming();
       }
 
       function nextTerm() {
@@ -516,7 +559,8 @@
         }
         ctx.restore();
       }
-      setInterval(draw, 30);
+      draw();
+      setInterval(draw, frameIntervalMs);
 
       const colorControls = {
         word: document.getElementById("wordColor"),
@@ -550,22 +594,10 @@
 
       const speedControl = document.getElementById("speedControl");
       const speedValue = document.getElementById("speedValue");
-      const cycleTime = document.getElementById("cycleTime");
-      function formatCycleTime(multiplier) {
-        const totalMinutes = 22 / multiplier;
-        if (totalMinutes >= 60) {
-          const hours = Math.floor(totalMinutes / 60);
-          const minutes = Math.round(totalMinutes % 60);
-          return minutes === 0 ? `約${hours}時間` : `約${hours}時間${minutes}分`;
-        }
-        const minutes = Math.floor(totalMinutes);
-        const seconds = Math.round((totalMinutes - minutes) * 60);
-        return seconds === 0 ? `約${minutes}分` : `約${minutes}分${seconds}秒`;
-      }
       speedControl.addEventListener("input", () => {
         speedMultiplier = Number(speedControl.value);
         speedValue.textContent = `${speedMultiplier.toFixed(2).replace(/0$/, "")}倍`;
-        cycleTime.textContent = `1周：${formatCycleTime(speedMultiplier)}`;
+        updateTiming();
       });
 
       document.addEventListener("click", (event) => {

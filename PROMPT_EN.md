@@ -61,7 +61,9 @@ Format every item as “Term: concise and accurate definition.” Cover the same
 4. Upper-right: speed panel
    - Slider from 0.25x to 3.0x in 0.25x steps
    - Display the selected multiplier.
-   - Estimate and display the cycle duration using 1.0x = approximately 22 minutes.
+   - Do not use a fixed baseline duration. Calculate items per second from lane count, card spacing, per-lane speed, frame interval, and selected multiplier, then estimate the duration of all 2,000 items.
+   - Calculate remaining items from current progress and display the estimated time until the current cycle ends.
+   - Recalculate timing after speed changes, rotation, and resize.
    - Display cycle number, issued item count, and percentage, such as “Cycle 1: 840 / 2,000 (42.0%).”
    - Include a visual progress bar.
    - After 2,000 items, increment the cycle number and restart progress with a newly shuffled order.

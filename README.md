@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <strong>2,000項目</strong> ・ <strong>重複なし</strong> ・ <strong>1.0倍で約22分／周</strong>
+  <strong>2,000項目</strong> ・ <strong>重複なし</strong> ・ <strong>端末に合わせた周回時間・残り時間</strong>
 </p>
 
 <p align="center">
