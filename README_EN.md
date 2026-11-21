@@ -16,6 +16,12 @@
   <a href="README.md">日本語</a> · <strong>English</strong>
 </p>
 
+<p align="center">
+  <a href="https://oouchi1234567890.github.io/matrix-learning/index_en.html"><strong>▶ Open IT &amp; AI Learning</strong></a>
+  &nbsp;|&nbsp;
+  <a href="https://oouchi1234567890.github.io/matrix-learning/">日本語版を開く</a>
+</p>
+
 ![IT & AI Learning main screen](docs/images/matrix-learning-overview-en.png)
 
 ## <img src="docs/icons/book-open.svg" width="24" alt="Book Open"> About this app
