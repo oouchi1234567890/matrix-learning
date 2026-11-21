@@ -12,11 +12,17 @@
   <strong>2,000項目</strong> ・ <strong>重複なし</strong> ・ <strong>1.0倍で約22分／周</strong>
 </p>
 
+<p align="center">
+  <strong>日本語</strong> ・ <a href="README_EN.md">English</a>
+</p>
+
 ![情報処理・AI学習のメイン画面](docs/images/matrix-learning-overview.png)
 
 ## <img src="docs/icons/book-open.svg" width="24" alt="Book Open"> このアプリについて
 
 応用情報技術者試験やG検定に関連する情報処理・AIの学習項目を、マトリックス風のカードとして表示するブラウザアプリです。全2,000項目を一度ずつ表示してから再シャッフルするため、同じ周回内では内容が重複しません。
+
+英語UIと英語コンテンツで学ぶ場合は、[English app](index_en.html)を開いてください。
 
 ## <img src="docs/icons/bot.svg" width="24" alt="Bot"> 学習分野
 
@@ -50,16 +56,22 @@
 ## <img src="docs/icons/book-open.svg" width="24" alt="Book Open"> ドキュメント
 
 - 画像付きの詳しい使い方：[操作ガイド](USER_GUIDE.md)
+- English project page: [README_EN.md](README_EN.md)
+- English user guide: [USER_GUIDE_EN.md](USER_GUIDE_EN.md)
 - Lucideアイコンのライセンス：[Third-Party Notices](THIRD_PARTY_NOTICES.md)
 
 ## ファイル構成
 
 ```text
 matrix-learning/
-├─ index.html                 # 画面・描画・操作パネル
-├─ knowledge.js              # 分野別の学習データ
-├─ README.md                 # プロジェクト紹介
-├─ USER_GUIDE.md             # 画像付き操作ガイド
+├─ index.html                 # 日本語版アプリ
+├─ index_en.html              # 英語版アプリ
+├─ knowledge.js               # 日本語学習データ
+├─ knowledge_en.js            # 英語学習データ
+├─ README.md                  # 日本語プロジェクト紹介
+├─ README_EN.md               # 英語プロジェクト紹介
+├─ USER_GUIDE.md              # 日本語画像付きガイド
+├─ USER_GUIDE_EN.md           # 英語画像付きガイド
 └─ docs/
    ├─ images/                # 操作画面
    └─ icons/                 # Lucide SVGアイコン

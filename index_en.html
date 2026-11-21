@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IT &amp; AI Learning | Applied IT Engineer &amp; JDLA G Test</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #000;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+      }
+      .color-panel {
+        position: fixed;
+        top: 14px;
+        left: 14px;
+        z-index: 10;
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 8px 12px;
+        align-items: center;
+        padding: 12px 14px;
+        color: #caffca;
+        background: rgba(0, 12, 0, 0.88);
+        border: 1px solid rgba(0, 255, 70, 0.55);
+        border-radius: 10px;
+        font: 12px sans-serif;
+        box-shadow: 0 0 18px rgba(0, 255, 70, 0.18);
+        backdrop-filter: blur(6px);
+      }
+      .color-panel strong {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13px;
+      }
+      .lucide {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+        flex: 0 0 auto;
+      }
+      .color-panel input[type="color"] {
+        width: 42px;
+        height: 26px;
+        padding: 0;
+        border: 1px solid #477547;
+        border-radius: 5px;
+        background: transparent;
+        cursor: pointer;
+      }
+      .color-panel button {
+        grid-column: 1 / -1;
+        padding: 5px 8px;
+        color: #caffca;
+        background: #072407;
+        border: 1px solid #238b3a;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .color-panel button:hover {
+        background: #0b3b0b;
+      }
+      .pause-button {
+        position: fixed;
+        top: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        min-width: 104px;
+        padding: 9px 14px;
+        color: #caffca;
+        background: rgba(0, 20, 0, 0.9);
+        border: 1px solid rgba(57, 231, 95, 0.7);
+        border-radius: 8px;
+        font: bold 13px sans-serif;
+        box-shadow: 0 0 14px rgba(0, 255, 70, 0.16);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+      }
+      .pause-button:hover {
+        background: rgba(8, 55, 8, 0.95);
+      }
+      .speed-panel {
+        position: fixed;
+        top: 14px;
+        right: 14px;
+        z-index: 10;
+        width: 190px;
+        padding: 12px 14px;
+        color: #caffca;
+        background: rgba(0, 12, 0, 0.88);
+        border: 1px solid rgba(0, 255, 70, 0.55);
+        border-radius: 10px;
+        font: 12px sans-serif;
+        box-shadow: 0 0 18px rgba(0, 255, 70, 0.18);
+        backdrop-filter: blur(6px);
+      }
+      .speed-panel label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
+      .cycle-time {
+        margin: 2px 0 8px;
+        color: #8df5a3;
+        font-size: 11px;
+        text-align: right;
+      }
+      .speed-panel label > span:first-child {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .speed-panel input {
+        width: 100%;
+        accent-color: #39e75f;
+        cursor: pointer;
+      }
+      .hint {
+        position: fixed;
+        bottom: 12px;
+        right: 16px;
+        color: #0a4;
+        font: 12px monospace;
+        opacity: 0.6;
+      }
+      .language-link {
+        position: fixed;
+        right: 16px;
+        bottom: 34px;
+        z-index: 10;
+        padding: 5px 9px;
+        color: #8df5a3;
+        background: rgba(0, 20, 0, 0.86);
+        border: 1px solid rgba(57, 231, 95, 0.5);
+        border-radius: 6px;
+        font: 12px sans-serif;
+        text-decoration: none;
+      }
+      .language-link:hover {
+        color: #e8ffe8;
+        border-color: #39e75f;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+    <div class="color-panel" id="colorPanel">
+      <strong><svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 22a10 10 0 1 1 10-10 4 4 0 0 1-4 4h-1.15a1.85 1.85 0 0 0-1.48 2.96l.31.41A1.65 1.65 0 0 1 14.36 22z"/></svg>Color settings</strong>
+      <label for="wordColor">Term</label><input id="wordColor" type="color" value="#caffca" />
+      <label for="accentColor">Meaning / border</label><input id="accentColor" type="color" value="#39e75f" />
+      <label for="backgroundColor">Background</label><input id="backgroundColor" type="color" value="#000000" />
+      <label for="cardColor">Card fill</label><input id="cardColor" type="color" value="#001400" />
+      <button id="resetColors" type="button">Reset colors</button>
+    </div>
+    <button class="pause-button" id="pauseButton" type="button"><svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg><span id="pauseLabel">Pause</span></button>
+    <div class="speed-panel" id="speedPanel">
+      <label for="speedControl"><span><svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>Speed</span><span id="speedValue">1.0x</span></label>
+      <div class="cycle-time" id="cycleTime">One cycle: about 22 min</div>
+      <input id="speedControl" type="range" min="0.25" max="3" step="0.25" value="1" />
+    </div>
+    <div class="hint">Click the background for fullscreen</div>
+    <a class="language-link" id="languageLink" href="./index.html" lang="ja">日本語</a>
+    <script src="./knowledge_en.js"></script>
+    <script>
+      const canvas = document.getElementById("c");
+      const ctx = canvas.getContext("2d");
+      const defaultPalette = {
+        word: "#caffca",
+        accent: "#39e75f",
+        background: "#000000",
+        card: "#001400",
+      };
+      const palette = { ...defaultPalette };
+
+      function hexToRgba(hex, alpha) {
+        const value = Number.parseInt(hex.slice(1), 16);
+        const red = (value >> 16) & 255;
+        const green = (value >> 8) & 255;
+        const blue = value & 255;
+        return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+      }
+      const allTerms = knowledgeTerms;
+      const laneWidth = 340;
+      const cardHeight = 96;
+      const cardsPerLane = 4;
+      let lanes = [];
+      let isPaused = false;
+      let speedMultiplier = 1;
+      let termQueue = [];
+      let lastTerm = "";
+
+      function nextTerm() {
+        if (termQueue.length === 0) {
+          termQueue = [...allTerms];
+          for (let index = termQueue.length - 1; index > 0; index--) {
+            const swapIndex = Math.floor(Math.random() * (index + 1));
+            [termQueue[index], termQueue[swapIndex]] = [
+              termQueue[swapIndex],
+              termQueue[index],
+            ];
+          }
+          if (termQueue.at(-1) === lastTerm && termQueue.length > 1) {
+            [termQueue[0], termQueue[termQueue.length - 1]] = [
+              termQueue[termQueue.length - 1],
+              termQueue[0],
+            ];
+          }
+        }
+        lastTerm = termQueue.pop();
+        return lastTerm;
+      }
+
+      function createLane(index, row, laneCount) {
+        const spacing = Math.max(cardHeight + 28, canvas.height / cardsPerLane);
+        const fittedLaneWidth = canvas.width / laneCount;
+        return {
+          laneIndex: index,
+          x: index * fittedLaneWidth + 18,
+          width: Math.min(laneWidth - 26, fittedLaneWidth - 16),
+          y:
+            row * spacing +
+            Math.random() * Math.max(0, spacing - cardHeight - 16),
+          speed: 1.5 + (index % 3) * 0.24,
+          text: nextTerm(),
+        };
+      }
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const laneCount = Math.max(1, Math.floor(canvas.width / laneWidth));
+        lanes = Array.from({ length: laneCount * cardsPerLane }, (_, itemIndex) =>
+          createLane(
+            itemIndex % laneCount,
+            Math.floor(itemIndex / laneCount),
+            laneCount,
+          ),
+        );
+      }
+      window.addEventListener("resize", resize);
+      resize();
+
+      function draw() {
+        if (isPaused) return;
+        // Clear the previous frame so long text stays readable.
+        ctx.fillStyle = hexToRgba(palette.background, 0.38);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (const lane of lanes) {
+          const separatorIndex = lane.text.indexOf(":");
+          const word = separatorIndex < 0 ? lane.text : lane.text.slice(0, separatorIndex);
+          const meaning = separatorIndex < 0 ? "" : lane.text.slice(separatorIndex + 1).trim();
+
+          ctx.fillStyle = hexToRgba(palette.card, 0.88);
+          ctx.fillRect(lane.x - 10, lane.y - 28, lane.width, cardHeight);
+          ctx.strokeStyle = hexToRgba(palette.accent, 0.55);
+          ctx.strokeRect(lane.x - 10, lane.y - 28, lane.width, cardHeight);
+
+          ctx.font = "bold 19px monospace";
+          ctx.fillStyle = palette.word;
+          ctx.fillText(word, lane.x, lane.y, lane.width - 22);
+
+          ctx.font = "14px sans-serif";
+          ctx.fillStyle = palette.accent;
+          const words = meaning.split(/\s+/);
+          const lines = [];
+          let line = "";
+          for (const nextWord of words) {
+            const candidate = line ? `${line} ${nextWord}` : nextWord;
+            if (ctx.measureText(candidate).width <= lane.width - 22 || !line) {
+              line = candidate;
+            } else {
+              lines.push(line);
+              line = nextWord;
+            }
+          }
+          if (line) lines.push(line);
+          lines.slice(0, 2).forEach((line, index) =>
+            ctx.fillText(line, lane.x, lane.y + 28 + index * 20),
+          );
+
+          lane.y += lane.speed * speedMultiplier;
+          if (lane.y > canvas.height + cardHeight) {
+            const spacing = Math.max(
+              cardHeight + 28,
+              canvas.height / cardsPerLane,
+            );
+            const sameLaneCards = lanes.filter(
+              (other) =>
+                other !== lane && other.laneIndex === lane.laneIndex,
+            );
+            const topCardY = Math.min(
+              ...sameLaneCards.map((other) => other.y),
+            );
+            lane.y = topCardY - spacing;
+            lane.text = nextTerm();
+          }
+        }
+      }
+      setInterval(draw, 30);
+
+      const colorControls = {
+        word: document.getElementById("wordColor"),
+        accent: document.getElementById("accentColor"),
+        background: document.getElementById("backgroundColor"),
+        card: document.getElementById("cardColor"),
+      };
+      Object.entries(colorControls).forEach(([name, input]) => {
+        input.addEventListener("input", () => {
+          palette[name] = input.value;
+          if (name === "background") document.body.style.background = input.value;
+        });
+      });
+      document.getElementById("resetColors").addEventListener("click", () => {
+        Object.assign(palette, defaultPalette);
+        Object.entries(colorControls).forEach(([name, input]) => {
+          input.value = defaultPalette[name];
+        });
+        document.body.style.background = defaultPalette.background;
+      });
+
+      const pauseButton = document.getElementById("pauseButton");
+      const pauseLabel = document.getElementById("pauseLabel");
+      pauseButton.addEventListener("click", () => {
+        isPaused = !isPaused;
+        pauseLabel.textContent = isPaused ? "Resume" : "Pause";
+        pauseButton.setAttribute("aria-pressed", String(isPaused));
+      });
+
+      const speedControl = document.getElementById("speedControl");
+      const speedValue = document.getElementById("speedValue");
+      const cycleTime = document.getElementById("cycleTime");
+      function formatCycleTime(multiplier) {
+        const totalMinutes = 22 / multiplier;
+        if (totalMinutes >= 60) {
+          const hours = Math.floor(totalMinutes / 60);
+          const minutes = Math.round(totalMinutes % 60);
+          return minutes === 0
+            ? `about ${hours} hr`
+            : `about ${hours} hr ${minutes} min`;
+        }
+        const minutes = Math.floor(totalMinutes);
+        const seconds = Math.round((totalMinutes - minutes) * 60);
+        return seconds === 0
+          ? `about ${minutes} min`
+          : `about ${minutes} min ${seconds} sec`;
+      }
+      speedControl.addEventListener("input", () => {
+        speedMultiplier = Number(speedControl.value);
+        speedValue.textContent = `${speedMultiplier.toFixed(2).replace(/0$/, "")}x`;
+        cycleTime.textContent = `One cycle: ${formatCycleTime(speedMultiplier)}`;
+      });
+
+      document.addEventListener("click", (event) => {
+        if (event.target.closest("#colorPanel, #pauseButton, #speedPanel, #languageLink")) return;
+        if (!document.fullscreenElement)
+          document.documentElement.requestFullscreen?.();
+        else document.exitFullscreen?.();
+      });
+    </script>
+  </body>
+</html>
+
