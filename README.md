@@ -63,6 +63,8 @@
 ## <img src="docs/icons/book-open.svg" width="24" alt="Book Open"> ドキュメント
 
 - 画像付きの詳しい使い方：[操作ガイド](USER_GUIDE.md)
+- このアプリを作成する日本語プロンプト：[PROMPT.md](PROMPT.md)
+- English creation prompt: [PROMPT_EN.md](PROMPT_EN.md)
 - English project page: [README_EN.md](README_EN.md)
 - English user guide: [USER_GUIDE_EN.md](USER_GUIDE_EN.md)
 - Lucideアイコンのライセンス：[Third-Party Notices](THIRD_PARTY_NOTICES.md)
@@ -79,6 +81,8 @@ matrix-learning/
 ├─ README_EN.md               # 英語プロジェクト紹介
 ├─ USER_GUIDE.md              # 日本語画像付きガイド
 ├─ USER_GUIDE_EN.md           # 英語画像付きガイド
+├─ PROMPT.md                  # 日本語作成プロンプト
+├─ PROMPT_EN.md               # 英語作成プロンプト
 └─ docs/
    ├─ images/                # 操作画面
    └─ icons/                 # Lucide SVGアイコン

@@ -63,6 +63,8 @@ No external libraries, package installation, or build step is required. Keep `in
 ## <img src="docs/icons/book-open.svg" width="24" alt="Book Open"> Documentation
 
 - Detailed illustrated instructions: [English User Guide](USER_GUIDE_EN.md)
+- English creation prompt: [PROMPT_EN.md](PROMPT_EN.md)
+- Japanese creation prompt: [PROMPT.md](PROMPT.md)
 - Japanese project page: [README in Japanese](README.md)
 - Lucide icon attribution: [Third-Party Notices](THIRD_PARTY_NOTICES.md)
 
@@ -78,6 +80,8 @@ matrix-learning/
 ├─ README_EN.md               # English project page
 ├─ USER_GUIDE.md              # Japanese illustrated guide
 ├─ USER_GUIDE_EN.md           # English illustrated guide
+├─ PROMPT.md                  # Japanese creation prompt
+├─ PROMPT_EN.md               # English creation prompt
 └─ docs/
    ├─ images/                 # Screenshots
    └─ icons/                  # Lucide SVG icons
