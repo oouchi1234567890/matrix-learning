@@ -47,6 +47,7 @@
 |:---:|---|---|
 | <img src="docs/icons/shuffle.svg" width="22" alt="Shuffle"> | 重複防止 | 2,000項目を出し切ってから再シャッフル |
 | <img src="docs/icons/gauge.svg" width="22" alt="Gauge"> | 速度調整 | 0.25倍〜3.0倍。1周の予想時間も自動表示 |
+| <img src="docs/icons/gauge.svg" width="22" alt="Gauge"> | 周回進捗 | 現在の周回・表示済み件数・割合をバーで表示 |
 | <img src="docs/icons/pause.svg" width="22" alt="Pause"> | 一時停止 | 読みたいカードを現在位置で停止・再開 |
 | <img src="docs/icons/palette.svg" width="22" alt="Palette"> | 配色変更 | 用語・意味・枠・背景・カード内部を個別設定 |
 | <img src="docs/icons/maximize.svg" width="22" alt="Maximize"> | 全画面表示 | 学習画面をクリックして全画面へ切り替え |

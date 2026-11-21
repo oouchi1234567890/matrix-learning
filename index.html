@@ -121,6 +121,29 @@
         font-size: 11px;
         text-align: right;
       }
+      .cycle-progress {
+        margin: 3px 0 9px;
+      }
+      .progress-label {
+        margin-bottom: 5px;
+        color: #8df5a3;
+        font-size: 11px;
+        text-align: right;
+      }
+      .progress-track {
+        height: 5px;
+        overflow: hidden;
+        background: rgba(202, 255, 202, 0.18);
+        border-radius: 999px;
+      }
+      .progress-bar {
+        display: block;
+        width: 0;
+        height: 100%;
+        background: #39e75f;
+        border-radius: inherit;
+        transition: width 0.2s ease;
+      }
       .speed-panel label > span:first-child {
         display: inline-flex;
         align-items: center;
@@ -184,6 +207,10 @@
       <label for="speedControl"><span><svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>スピード</span><span id="speedValue">1.0倍</span></label>
       <div class="cycle-time" id="cycleTime">1周：約22分</div>
       <input id="speedControl" type="range" min="0.25" max="3" step="0.25" value="1" />
+      <div class="cycle-progress" aria-live="polite">
+        <div class="progress-label" id="progressLabel">進捗 0 / 2,000（0.0%）</div>
+        <div class="progress-track"><span class="progress-bar" id="progressBar"></span></div>
+      </div>
     </div>
     <div class="hint">クリックで全画面</div>
     <a class="language-link" id="languageLink" href="./index_en.html" lang="en"><svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>English</a>
@@ -293,9 +320,21 @@
       let speedMultiplier = 1;
       let termQueue = [];
       let lastTerm = "";
+      let cycleNumber = 0;
+      let cycleIssued = 0;
+
+      function updateProgress() {
+        const ratio = cycleIssued / allTerms.length;
+        const percent = (ratio * 100).toFixed(1);
+        document.getElementById("progressLabel").textContent =
+          `${cycleNumber}周目：${cycleIssued.toLocaleString("ja-JP")} / ${allTerms.length.toLocaleString("ja-JP")}（${percent}%）`;
+        document.getElementById("progressBar").style.width = `${ratio * 100}%`;
+      }
 
       function nextTerm() {
         if (termQueue.length === 0) {
+          cycleNumber++;
+          cycleIssued = 0;
           termQueue = [...allTerms];
           for (let index = termQueue.length - 1; index > 0; index--) {
             const swapIndex = Math.floor(Math.random() * (index + 1));
@@ -312,6 +351,8 @@
           }
         }
         lastTerm = termQueue.pop();
+        cycleIssued++;
+        updateProgress();
         return lastTerm;
       }
 
@@ -401,6 +442,7 @@
         input.addEventListener("input", () => {
           palette[name] = input.value;
           if (name === "background") document.body.style.background = input.value;
+          if (name === "accent") document.getElementById("progressBar").style.background = input.value;
         });
       });
       document.getElementById("resetColors").addEventListener("click", () => {
@@ -409,6 +451,7 @@
           input.value = defaultPalette[name];
         });
         document.body.style.background = defaultPalette.background;
+        document.getElementById("progressBar").style.background = defaultPalette.accent;
       });
 
       const pauseButton = document.getElementById("pauseButton");

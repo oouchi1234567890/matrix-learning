@@ -47,6 +47,7 @@ Open the [English app](index_en.html) to study with an English interface and Eng
 |:---:|---|---|
 | <img src="docs/icons/shuffle.svg" width="22" alt="Shuffle"> | No repeats | Reshuffles only after all 2,000 items have appeared |
 | <img src="docs/icons/gauge.svg" width="22" alt="Gauge"> | Speed control | Adjustable from 0.25× to 3.0× with an estimated cycle time |
+| <img src="docs/icons/gauge.svg" width="22" alt="Gauge"> | Cycle progress | Shows the cycle number, issued item count, percentage, and progress bar |
 | <img src="docs/icons/pause.svg" width="22" alt="Pause"> | Pause | Stops and resumes every card at its current position |
 | <img src="docs/icons/palette.svg" width="22" alt="Palette"> | Color settings | Customize terms, definitions, borders, page background, and card fill |
 | <img src="docs/icons/maximize.svg" width="22" alt="Maximize"> | Full screen | Click the study area to enter or leave full-screen mode |

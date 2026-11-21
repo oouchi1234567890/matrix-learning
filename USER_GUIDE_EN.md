@@ -68,6 +68,8 @@ Click a color swatch and choose a color. Select **Restore Defaults** to return t
 
 The selected multiplier appears above the slider and takes effect immediately. The panel also estimates the time needed to show all 2,000 items at the selected speed. For example, it shows approximately 22 minutes at `1.0×` and approximately 11 minutes at `2.0×`.
 
+Below the slider, a progress bar shows the current cycle number, issued item count, and percentage of all 2,000 items—for example, `Cycle 1: 840 / 2,000 (42.0%)`. After all items have appeared, the next cycle starts from the beginning with a newly shuffled order.
+
 ## Pausing and resuming
 
 <img src="docs/icons/pause.svg" width="22" alt="Pause"> Select **Pause** at the top center to stop every card at its current position.
