@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>マトリックス学習</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #000;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+      }
+      .color-panel {
+        position: fixed;
+        top: 14px;
+        left: 14px;
+        z-index: 10;
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 8px 12px;
+        align-items: center;
+        padding: 12px 14px;
+        color: #caffca;
+        background: rgba(0, 12, 0, 0.88);
+        border: 1px solid rgba(0, 255, 70, 0.55);
+        border-radius: 10px;
+        font: 12px sans-serif;
+        box-shadow: 0 0 18px rgba(0, 255, 70, 0.18);
+        backdrop-filter: blur(6px);
+      }
+      .color-panel strong {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13px;
+      }
+      .lucide {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+        flex: 0 0 auto;
+      }
+      .color-panel input[type="color"] {
+        width: 42px;
+        height: 26px;
+        padding: 0;
+        border: 1px solid #477547;
+        border-radius: 5px;
+        background: transparent;
+        cursor: pointer;
+      }
+      .color-panel button {
+        grid-column: 1 / -1;
+        padding: 5px 8px;
+        color: #caffca;
+        background: #072407;
+        border: 1px solid #238b3a;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .color-panel button:hover {
+        background: #0b3b0b;
+      }
+      .pause-button {
+        position: fixed;
+        top: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        min-width: 104px;
+        padding: 9px 14px;
+        color: #caffca;
+        background: rgba(0, 20, 0, 0.9);
+        border: 1px solid rgba(57, 231, 95, 0.7);
+        border-radius: 8px;
+        font: bold 13px sans-serif;
+        box-shadow: 0 0 14px rgba(0, 255, 70, 0.16);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+      }
+      .pause-button:hover {
+        background: rgba(8, 55, 8, 0.95);
+      }
+      .speed-panel {
+        position: fixed;
+        top: 14px;
+        right: 14px;
+        z-index: 10;
+        width: 190px;
+        padding: 12px 14px;
+        color: #caffca;
+        background: rgba(0, 12, 0, 0.88);
+        border: 1px solid rgba(0, 255, 70, 0.55);
+        border-radius: 10px;
+        font: 12px sans-serif;
+        box-shadow: 0 0 18px rgba(0, 255, 70, 0.18);
+        backdrop-filter: blur(6px);
+      }
+      .speed-panel label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
+      .cycle-time {
+        margin: 2px 0 8px;
+        color: #8df5a3;
+        font-size: 11px;
+        text-align: right;
+      }
+      .speed-panel label > span:first-child {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .speed-panel input {
+        width: 100%;
+        accent-color: #39e75f;
+        cursor: pointer;
+      }
+      .hint {
+        position: fixed;
+        bottom: 12px;
+        right: 16px;
+        color: #0a4;
+        font: 12px monospace;
+        opacity: 0.6;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+    <div class="color-panel" id="colorPanel">
+      <strong><svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 22a10 10 0 1 1 10-10 4 4 0 0 1-4 4h-1.15a1.85 1.85 0 0 0-1.48 2.96l.31.41A1.65 1.65 0 0 1 14.36 22z"/></svg>カラー設定</strong>
+      <label for="wordColor">用語</label><input id="wordColor" type="color" value="#caffca" />
+      <label for="accentColor">意味・枠</label><input id="accentColor" type="color" value="#39e75f" />
+      <label for="backgroundColor">背景</label><input id="backgroundColor" type="color" value="#000000" />
+      <label for="cardColor">枠の中</label><input id="cardColor" type="color" value="#001400" />
+      <button id="resetColors" type="button">初期色に戻す</button>
+    </div>
+    <button class="pause-button" id="pauseButton" type="button"><svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg><span id="pauseLabel">一時停止</span></button>
+    <div class="speed-panel" id="speedPanel">
+      <label for="speedControl"><span><svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>スピード</span><span id="speedValue">1.0倍</span></label>
+      <div class="cycle-time" id="cycleTime">1周：約22分</div>
+      <input id="speedControl" type="range" min="0.25" max="3" step="0.25" value="1" />
+    </div>
+    <div class="hint">クリックで全画面</div>
+    <script src="./knowledge.js"></script>
+    <script>
+      const canvas = document.getElementById("c");
+      const ctx = canvas.getContext("2d");
+      const defaultPalette = {
+        word: "#caffca",
+        accent: "#39e75f",
+        background: "#000000",
+        card: "#001400",
+      };
+      const palette = { ...defaultPalette };
+
+      function hexToRgba(hex, alpha) {
+        const value = Number.parseInt(hex.slice(1), 16);
+        const red = (value >> 16) & 255;
+        const green = (value >> 8) & 255;
+        const blue = value & 255;
+        return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+      }
+      const baseTerms = [
+        "アルゴリズム：問題を解くための手順", "データ構造：データを効率よく扱う仕組み",
+        "スタック：後入れ先出しの構造", "キュー：先入れ先出しの構造",
+        "ハッシュ：値を一定の規則で変換する技術", "二分探索：探索範囲を半分ずつ絞る方法",
+        "オブジェクト指向：データと処理を一体化する考え方", "カプセル化：内部の実装を隠すこと",
+        "継承：既存クラスの性質を引き継ぐ仕組み", "多態性：同じ操作で異なる動作をさせる性質",
+        "正規化：データの重複や矛盾を減らす設計", "トランザクション：一連の処理をまとめた単位",
+        "排他制御：同時アクセスの競合を防ぐ制御", "デッドロック：処理同士が互いに待ち続ける状態",
+        "主キー：行を一意に識別する項目", "外部キー：別の表を参照する項目",
+        "SQL：データベースを操作する言語", "DBMS：データベースを管理するソフトウェア",
+        "TCP/IP：インターネット通信の基本規約", "HTTP：Webデータを送受信する規約",
+        "DNS：ドメイン名をIPアドレスに変換する仕組み", "DHCP：IPアドレスを自動で割り当てる仕組み",
+        "ルータ：異なるネットワーク間で通信を中継する機器", "サブネット：ネットワークを分割した範囲",
+        "OSI：通信機能を7階層に分けた参照モデル", "暗号化：データを読めない形に変換すること",
+        "公開鍵：公開して暗号化や署名検証に使う鍵", "電子署名：本人性と改ざんの有無を確認する技術",
+        "ハッシュ関数：データを固定長の値に変換する関数", "認証：利用者が本人か確認すること",
+        "ファイアウォール：不正な通信を遮断する仕組み", "CPU：命令を実行する中央処理装置",
+        "キャッシュ：よく使うデータを高速な領域に置く仕組み", "仮想記憶：補助記憶を主記憶のように使う技術",
+        "ページング：記憶領域を固定長単位で管理する方式", "RAID：複数のディスクを組み合わせる技術",
+        "冗長化：予備を用意して障害に備えること", "クラウド：ネット経由でIT資源を利用する形態",
+        "SaaS：ソフトウェアをサービスとして利用する形態", "PaaS：開発基盤をサービスとして利用する形態",
+        "IaaS：インフラをサービスとして利用する形態", "要件定義：システムに必要な条件を決める工程",
+        "テスト：システムが正しく動くか確認する工程", "アジャイル：短い周期で開発を繰り返す手法",
+        "スクラム：役割と反復を定めたアジャイル手法", "WBS：作業を階層的に分解した図表",
+        "クリティカルパス：遅延が全体の遅延につながる経路", "PDCA：改善を継続する管理サイクル",
+        "SLA：サービス品質に関する合意",
+        "論理演算：真偽値を使って行う演算", "浮動小数点：小数を仮数と指数で表す方式",
+        "補数：減算を加算として扱うための数", "誤差：真の値と計算結果との差",
+        "MIPS：1秒間に実行できる命令数の指標", "パイプライン：命令処理を段階的に並行実行する方式",
+        "マルチコア：複数の処理コアを持つCPU", "DMA：CPUを介さず装置とメモリ間で転送する方式",
+        "割込み：実行中の処理を中断して別処理を行う仕組み", "スプーリング：低速装置へのデータを一時保存する方式",
+        "セマフォ：共有資源へのアクセスを制御する仕組み", "ラウンドロビン：一定時間ごとに処理を切り替える方式",
+        "LRU：最も長く未使用のデータを置換する方式", "スラッシング：ページ交換が多発して性能が落ちる状態",
+        "コンパイラ：ソースコードを機械語などへ一括翻訳するもの", "API：ソフトウェア同士を連携させる接点",
+        "UML：システム設計を図で表すための標準記法", "DFD：データの流れと処理を表す図",
+        "ER図：実体と関連を表すデータモデル図", "ACID：トランザクションが備える四つの特性",
+        "インデックス：検索を高速化するための索引", "ビュー：問合せ結果を仮想的な表として扱う仕組み",
+        "バックアップ：障害に備えてデータを複製すること", "レプリケーション：データを複数環境へ同期する技術",
+        "IPv6：128ビットのIPアドレスを使う通信規約", "NAT：プライベートIPとグローバルIPを変換する技術",
+        "VLAN：物理構成に依存せずLANを論理分割する技術", "VPN：公衆網上に安全な仮想専用網を作る技術",
+        "SMTP：電子メールを送信・転送する規約", "SNMP：ネットワーク機器を監視・管理する規約",
+        "CSMA/CD：衝突を検出して再送するアクセス制御方式", "共通鍵：暗号化と復号に同じ鍵を使う方式",
+        "PKI：公開鍵証明書を管理する基盤", "TLS：通信経路を暗号化して保護する規約",
+        "SQLインジェクション：不正なSQLを実行させる攻撃", "XSS：Webページに不正なスクリプトを埋め込む攻撃",
+        "CSRF：利用者の意図しない操作を実行させる攻撃", "マルウェア：悪意のあるソフトウェアの総称",
+        "IDS：不正な通信や侵入を検知するシステム", "ISMS：情報セキュリティを継続管理する仕組み",
+        "リスクアセスメント：リスクを特定・分析・評価する活動", "DevOps：開発と運用が連携して価値提供を速める考え方",
+        "CI/CD：統合・テスト・提供を継続的に自動化する手法", "ブラックボックステスト：内部構造を見ず仕様から確認するテスト",
+        "ホワイトボックステスト：内部構造に基づいて確認するテスト", "EVM：進捗とコストを出来高で管理する手法",
+        "SWOT：強み・弱み・機会・脅威を分析する手法", "BCP：事業を継続・早期復旧するための計画",
+        "ROI：投資額に対する利益の割合", "損益分岐点：利益がゼロになる売上高",
+        "著作権：著作物の利用を保護する権利",
+        "ゼロトラスト：すべてのアクセスを検証するセキュリティ概念",
+        "WAF：Webアプリへの攻撃を検知・遮断する仕組み",
+        "SIEM：ログを集約・分析して脅威を検知する仕組み",
+        "SOC：セキュリティを監視・分析する専門組織",
+        "EDR：端末の挙動を監視して脅威へ対応する仕組み",
+        "多要素認証：異なる種類の要素を組み合わせる認証",
+        "SSO：一度の認証で複数サービスを利用する仕組み",
+        "OAuth：権限を安全に委譲するための認可方式",
+        "SAML：認証情報をサービス間で交換する規格",
+        "ランサムウェア：データを暗号化して身代金を要求する攻撃",
+        "DoS攻撃：大量の処理でサービスを停止させる攻撃",
+        "バッファオーバフロー：領域を超えた書込みを悪用する攻撃",
+        "CVSS：脆弱性の深刻度を数値で評価する指標",
+        "機械学習：データから規則やパターンを学習する技術",
+        "深層学習：多層ニューラルネットワークによる機械学習",
+        "教師あり学習：正解付きデータから関係を学ぶ手法",
+        "教師なし学習：正解のないデータから構造を見つける手法",
+        "強化学習：報酬を最大化する行動を試行錯誤で学ぶ手法",
+        "ニューラルネットワーク：脳の神経回路を模した学習モデル",
+        "CNN：画像の特徴抽出に適したニューラルネットワーク",
+        "RNN：時系列データの扱いに適したニューラルネットワーク",
+        "Transformer：注意機構を用いて系列を処理するモデル",
+        "生成AI：学習データを基に新しいコンテンツを生成するAI",
+        "大規模言語モデル：大量の文章から言語パターンを学んだモデル",
+        "ハルシネーション：生成AIが誤った情報をもっともらしく出す現象",
+      ];
+      const allTerms = knowledgeTerms;
+      const laneWidth = 340;
+      const cardHeight = 96;
+      const cardsPerLane = 4;
+      let lanes = [];
+      let isPaused = false;
+      let speedMultiplier = 1;
+      let termQueue = [];
+      let lastTerm = "";
+
+      function nextTerm() {
+        if (termQueue.length === 0) {
+          termQueue = [...allTerms];
+          for (let index = termQueue.length - 1; index > 0; index--) {
+            const swapIndex = Math.floor(Math.random() * (index + 1));
+            [termQueue[index], termQueue[swapIndex]] = [
+              termQueue[swapIndex],
+              termQueue[index],
+            ];
+          }
+          if (termQueue.at(-1) === lastTerm && termQueue.length > 1) {
+            [termQueue[0], termQueue[termQueue.length - 1]] = [
+              termQueue[termQueue.length - 1],
+              termQueue[0],
+            ];
+          }
+        }
+        lastTerm = termQueue.pop();
+        return lastTerm;
+      }
+
+      function createLane(index, row, laneCount) {
+        const spacing = Math.max(cardHeight + 28, canvas.height / cardsPerLane);
+        const fittedLaneWidth = canvas.width / laneCount;
+        return {
+          laneIndex: index,
+          x: index * fittedLaneWidth + 18,
+          width: Math.min(laneWidth - 26, fittedLaneWidth - 16),
+          y:
+            row * spacing +
+            Math.random() * Math.max(0, spacing - cardHeight - 16),
+          speed: 1.5 + (index % 3) * 0.24,
+          text: nextTerm(),
+        };
+      }
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const laneCount = Math.max(1, Math.floor(canvas.width / laneWidth));
+        lanes = Array.from({ length: laneCount * cardsPerLane }, (_, itemIndex) =>
+          createLane(
+            itemIndex % laneCount,
+            Math.floor(itemIndex / laneCount),
+            laneCount,
+          ),
+        );
+      }
+      window.addEventListener("resize", resize);
+      resize();
+
+      function draw() {
+        if (isPaused) return;
+        // 前のフレームを消し、長い文字が残像で重ならないようにする
+        ctx.fillStyle = hexToRgba(palette.background, 0.38);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (const lane of lanes) {
+          const [word, meaning = ""] = lane.text.split("：");
+
+          ctx.fillStyle = hexToRgba(palette.card, 0.88);
+          ctx.fillRect(lane.x - 10, lane.y - 28, lane.width, cardHeight);
+          ctx.strokeStyle = hexToRgba(palette.accent, 0.55);
+          ctx.strokeRect(lane.x - 10, lane.y - 28, lane.width, cardHeight);
+
+          ctx.font = "bold 19px monospace";
+          ctx.fillStyle = palette.word;
+          ctx.fillText(word, lane.x, lane.y, lane.width - 22);
+
+          ctx.font = "14px sans-serif";
+          ctx.fillStyle = palette.accent;
+          const maxChars = 20;
+          const lines = meaning.match(new RegExp(`.{1,${maxChars}}`, "g")) || [""];
+          lines.slice(0, 2).forEach((line, index) =>
+            ctx.fillText(line, lane.x, lane.y + 28 + index * 20),
+          );
+
+          lane.y += lane.speed * speedMultiplier;
+          if (lane.y > canvas.height + cardHeight) {
+            const spacing = Math.max(
+              cardHeight + 28,
+              canvas.height / cardsPerLane,
+            );
+            const sameLaneCards = lanes.filter(
+              (other) =>
+                other !== lane && other.laneIndex === lane.laneIndex,
+            );
+            const topCardY = Math.min(
+              ...sameLaneCards.map((other) => other.y),
+            );
+            lane.y = topCardY - spacing;
+            lane.text = nextTerm();
+          }
+        }
+      }
+      setInterval(draw, 30);
+
+      const colorControls = {
+        word: document.getElementById("wordColor"),
+        accent: document.getElementById("accentColor"),
+        background: document.getElementById("backgroundColor"),
+        card: document.getElementById("cardColor"),
+      };
+      Object.entries(colorControls).forEach(([name, input]) => {
+        input.addEventListener("input", () => {
+          palette[name] = input.value;
+          if (name === "background") document.body.style.background = input.value;
+        });
+      });
+      document.getElementById("resetColors").addEventListener("click", () => {
+        Object.assign(palette, defaultPalette);
+        Object.entries(colorControls).forEach(([name, input]) => {
+          input.value = defaultPalette[name];
+        });
+        document.body.style.background = defaultPalette.background;
+      });
+
+      const pauseButton = document.getElementById("pauseButton");
+      const pauseLabel = document.getElementById("pauseLabel");
+      pauseButton.addEventListener("click", () => {
+        isPaused = !isPaused;
+        pauseLabel.textContent = isPaused ? "再開" : "一時停止";
+        pauseButton.setAttribute("aria-pressed", String(isPaused));
+      });
+
+      const speedControl = document.getElementById("speedControl");
+      const speedValue = document.getElementById("speedValue");
+      const cycleTime = document.getElementById("cycleTime");
+      function formatCycleTime(multiplier) {
+        const totalMinutes = 22 / multiplier;
+        if (totalMinutes >= 60) {
+          const hours = Math.floor(totalMinutes / 60);
+          const minutes = Math.round(totalMinutes % 60);
+          return minutes === 0 ? `約${hours}時間` : `約${hours}時間${minutes}分`;
+        }
+        const minutes = Math.floor(totalMinutes);
+        const seconds = Math.round((totalMinutes - minutes) * 60);
+        return seconds === 0 ? `約${minutes}分` : `約${minutes}分${seconds}秒`;
+      }
+      speedControl.addEventListener("input", () => {
+        speedMultiplier = Number(speedControl.value);
+        speedValue.textContent = `${speedMultiplier.toFixed(2).replace(/0$/, "")}倍`;
+        cycleTime.textContent = `1周：${formatCycleTime(speedMultiplier)}`;
+      });
+
+      document.addEventListener("click", (event) => {
+        if (event.target.closest("#colorPanel, #pauseButton, #speedPanel")) return;
+        if (!document.fullscreenElement)
+          document.documentElement.requestFullscreen?.();
+        else document.exitFullscreen?.();
+      });
+    </script>
+  </body>
+</html>
