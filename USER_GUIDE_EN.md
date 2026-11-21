@@ -16,9 +16,10 @@ IT & AI Learning is a browser-based app for reviewing concepts from Japan's Appl
 4. [Changing the speed](#changing-the-speed)
 5. [Pausing and resuming](#pausing-and-resuming)
 6. [Using full-screen mode](#using-full-screen-mode)
-7. [How study items are displayed](#how-study-items-are-displayed)
-8. [Publishing with GitHub Pages](#publishing-with-github-pages)
-9. [Troubleshooting](#troubleshooting)
+7. [Using the app on a smartphone](#using-the-app-on-a-smartphone)
+8. [How study items are displayed](#how-study-items-are-displayed)
+9. [Publishing with GitHub Pages](#publishing-with-github-pages)
+10. [Troubleshooting](#troubleshooting)
 
 ## Starting the app
 
@@ -83,6 +84,10 @@ Below the slider, a progress bar shows the current cycle number, issued item cou
 <img src="docs/icons/maximize.svg" width="22" alt="Maximize"> Click anywhere outside the color, speed, and pause controls to enter full-screen mode. Click the study area again to leave it.
 
 If full-screen mode does not start, allow full-screen access in your browser.
+
+## Using the app on a smartphone
+
+At widths of 600px or less, the color and speed panels become compact, while Pause and the language switch move to the bottom of the screen. Cards are drawn below the top controls and automatically sized so neither edge is clipped. Portrait layouts are supported from 320px wide.
 
 ## How study items are displayed
 
