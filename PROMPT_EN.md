@@ -72,6 +72,19 @@ Format every item as “Term: concise and accurate definition.” Cover the same
 - Reposition controls such as the language switch on narrow screens so controls do not overlap.
 - Use appropriate accessibility attributes, including aria-live, aria-pressed, label associations, and aria-hidden.
 
+[Smartphone support]
+- Include the viewport meta tag and prevent horizontal scrolling.
+- Switch to a dedicated mobile layout at viewport widths of 600px or less.
+- Compact the color and speed panels and keep them fully inside the upper-left and upper-right edges.
+- Apply box-sizing: border-box so panel widths include padding and borders.
+- Move Pause to the lower-left and the language switch to the lower-right.
+- Hide the small full-screen hint on mobile.
+- Draw cards only below the top settings and above the bottom buttons. Use a Canvas clipping region so moving card text cannot appear underneath the controls.
+- When the viewport is narrower than laneWidth, still create at least one lane and limit card width to the viewport width minus 16px.
+- Center each card within its lane and preserve at least 8px of margin on both sides.
+- Support portrait layouts from 320px wide and verify common sizes such as 390×844.
+- Keep identical responsive behavior in the Japanese and English pages.
+
 [Icons]
 - Use Lucide icons such as Palette, Pause, Gauge, and Languages.
 - Include icons as inline or local SVG so the app does not depend on an external CDN.
@@ -82,7 +95,7 @@ Format every item as “Term: concise and accurate definition.” Cover the same
 - Validate that JavaScript contains no syntax errors.
 - Mechanically verify all category counts, the 2,000-item total, and 2,000 unique display strings.
 - Keep feature parity between the Japanese and English pages.
-- Visually test at 1600×900 and ensure the layout remains usable on narrower screens.
+- Visually test at desktop 1600×900 and mobile 320×568 and 390×844. Controls, cards, and buttons must not be clipped or overlap.
 - Produce a complete result that can be published directly with GitHub Pages.
 ```
 
